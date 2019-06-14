@@ -38,8 +38,9 @@ while (True):
 
     # This will loop through the 10 difference sections where we are searching with our windows
     # our windows have the height of 60px
-
     array = [600, 540, 480, 420, 360, 300, 240, 180, 120, 60]
+
+    # Loop 10 times to find the 10 difference box locations starting from the bottom, going to the top
     for i in range(10):
 
         # Add together all the columns and 60 rows to find where the white line is
