@@ -40,6 +40,9 @@ while (True):
     # our windows have the height of 60px
     array = [600, 540, 480, 420, 360, 300, 240, 180, 120, 60]
 
+    x = []
+
+
     # Loop 10 times to find the 10 difference box locations starting from the bottom, going to the top
     for i in range(10):
 
@@ -64,11 +67,50 @@ while (True):
         #print(str(array[i]) + " iFirst: " + str(iFirst))
         #print(str(array[i]) + " iLast: " + str(iLast))
 
+        x.append((iLast - iFirst) / 2 + iFirst)
+
         #Add a rectangle onto the image of where the path was found
-        cv2.rectangle(warped, (iFirst, array[i] - 60), (iLast,array[i]),(120,120,120),2)
+        cv2.rectangle(warped, (iFirst, array[i] - 60), (iLast,array[i]),(120,120,120),3)
 
+    # print(len(new_array[:len(x)]))
+    #print(len(x[::-1]),len(new_array[0:len(x[::-1])]))
+    # Create a polynomial that will fit the curve
+    z = np.polyfit(x[::-1], array[len(array) - len(x):], 2 )
+    
+    p = np.poly1d(z)
+    plt.show()
 
+    # print("polynomial: " + str(z))
+    # cv2.putText(warped, "Polynomial: " + string(z)
     # Display the new image with the rectangles added to it
+    # print("pt1: " + str(x[0]) + " " + str(int(p(x[0]))))
+    # print("pt2: " + str(x[1]) + " " + str(int(p(x[1]))))
+
+    for i in range(len(x)):
+        cv2.circle(warped, (int(x[i]), 600 - int(p(x[i]))), 5, (120,120,120), 2)
+
+    # print("y pt " + str(int(p(160))))
+    # cv2.circle(warped, (154, 600 - int(p(154))), 5, (120,120,120),2)
+
+    point = []
+    point2 = []
+    midpoint = []
+
+    xSelector = 1
+    x2Selector = 6
+
+    point.append(int(x[xSelector])) 
+    point.append(600 - int(p(x[xSelector])))
+
+    point2.append(int(x[x2Selector]))
+    point2.append(600 - int(p(x[x2Selector])))
+
+    midpoint.append(point[0] - point2[0])
+    midpoint.append(point[1] - point2[1])
+
+    if midpoint[1] & midpoint[0] != 0:
+        print(np.degrees(np.arccos(midpoint[0]/midpoint[1])))
+
     cv2.imshow("Warped Image with Box", warped)
 
     # Wait for a q to close the program and image
